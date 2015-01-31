@@ -22,13 +22,11 @@ var app = angular.module('App', ['angular-whenScrolled']);
 app.controller('scrollBoxController',function($scope,$http){
     
     $scope.items = [];
-    $scope.counter = function(){
-        return $scope.items.length;
-    }
+    $scope.counter = 0;
     $scope.loadMore = function(){
         if (!$scope.stopLoadingData) {
             $scope.loading = true;
-        $http.get("http://www.stellarbiotechnologies.com/media/press-releases/json?limit=5&offset=" + $scope.counter() + "").
+        $http.get("http://www.stellarbiotechnologies.com/media/press-releases/json?limit=5&offset=" + $scope.counter + "").
         success(function(result){
             for(var i = 0;i<result.news.length;i++){
                 item = result.news[i];
@@ -37,6 +35,7 @@ app.controller('scrollBoxController',function($scope,$http){
         });
         }
         $scope.loading = false;
+        $scope.counter += 5;
     }
     $scope.loadMore();
 });
@@ -66,8 +65,8 @@ mod.directive("whenScrolled", function ($window) {
    <body ng-app="App">
       <div ng-controller="scrollBoxController" when-scrolled="loadMore()" class="scroll-box">
           <div ng-repeat="item in items" class="item well">
-              <em>{{item.published}}</em>
-              <span>{{item.title}}</span><br />
+              <em>{{item.published}}</em><br />
+              <span><strong>{{item.title}}</strong></span>
           </div>
           <div ng-show='loading'>Loading Data ...</div>
       </div>
