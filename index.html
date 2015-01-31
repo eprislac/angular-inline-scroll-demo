@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+   <head>
+       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+       <style>
+           .scroll-box {
+                border: 1px solid green;
+                height: 400px;
+                overflow: auto;
+               padding:10px;
+
+            }
+           .item{
+                height:100px;
+            }
+       </style>
+       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+       <script type="text/javascript">
+
+
+var app = angular.module('App', ['angular-whenScrolled']);
+app.controller('scrollBoxController',function($scope,$http){
+    
+    $scope.items = [];
+    $scope.counter = function(){
+        return $scope.items.length;
+    }
+    $scope.loadMore = function(){
+        if (!$scope.stopLoadingData) {
+            $scope.loading = true;
+        $http.get("http://www.stellarbiotechnologies.com/media/press-releases/json?limit=5&offset=" + $scope.counter() + "").
+        success(function(result){
+            for(var i = 0;i<result.news.length;i++){
+                item = result.news[i];
+                $scope.items.push(item);
+            }
+        });
+        }
+        $scope.loading = false;
+    }
+    $scope.loadMore();
+});
+// from https://github.com/juanxme/angular-whenScrolled
+var mod;
+mod = angular.module('angular-whenScrolled', []);
+mod.directive("whenScrolled", function ($window) {
+    return{
+        restrict: 'A',
+        link: function (scope, elem, attrs) {
+            raw = elem[0];
+            var checkBounds = function (evt) {
+                var rectObject = raw.getBoundingClientRect();
+                if ($window.innerHeight >rectObject.bottom+100) {
+                    scope.loading = true;
+                    scope.$apply(attrs.whenScrolled);
+                }
+            };
+            angular.element($window).bind('scroll load', checkBounds);
+        }
+    };
+});
+
+
+       </script>
+   </head> 
+   <body ng-app="App">
+      <div ng-controller="scrollBoxController" when-scrolled="loadMore()" class="scroll-box">
+          <div ng-repeat="item in items" class="item well">
+              <em>{{item.published}}</em>
+              <span>{{item.title}}</span><br />
+          </div>
+          <div ng-show='loading'>Loading Data ...</div>
+      </div>
+     
+   </body>
+</html>
