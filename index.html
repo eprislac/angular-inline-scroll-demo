@@ -2,13 +2,13 @@
 <html>
    <head>
        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
        <style>
            body {
                background-color: #566C7F;
            }
            h1 {
-               font-family:Helvetica;
-               font-weight:300;
+               font-family: "motor";
                font-size:3em;
                color:#9BC2E5;
            }
@@ -21,30 +21,38 @@
 
             }
            div.item.well{
-               
                 background-color:#2B3640 !important;
                 border: 1px solid #2B3640;
             }
+           div.item.well p {
+               color: #D1F3FF;
+               text-align:justify;
+               font-family: "expo-sans-pro",sans-serif;               
+               font-weight:200;
+           }
            .title {
-               font-size: 1.5em;
-               font-family:"Helvetica", "Segoe UI", sans-serif;
-               font-weight:300;
+               font-size: 1.15em;
+               font-family: "expo-sans-pro",sans-serif;               
+               font-weight:200;
                color: #ACD7FF;
            }
            .published {
                font-size: .825em;
-               font-family:"Helvetica", "Segoe UI", sans-serif;
                color: #81A1BF;
            }
            .footer-links {
                color:lightgrey;
                font-size:.750em;
            }
-           .footer-links a {
+           .footer-links a, p a {
                color:#EDEDED;
            }
+
        </style>
        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+       <script src="//use.typekit.net/roe8afx.js"></script>
+       <script>try{Typekit.load();}catch(e){}</script>
        <script type="text/javascript">
 
 
@@ -60,6 +68,7 @@ app.controller('scrollBoxController',function($scope,$http){
         success(function(result){
             for(var i = 0;i<result.news.length;i++){
                 item = result.news[i];
+                item.published = moment(item.published,'YYYY-MM-DD').calendar();
                 $scope.items.push(item);
             }
         });
@@ -96,13 +105,19 @@ mod.directive("whenScrolled", function ($window) {
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <h1 class="text-center">Angular Infinite Scroll Demo</h1>
+               <div style="padding:10px;">
+                   <h1 class="text-center tk-motor">Angular Infinite Scroll Demo</h1>
+                <div class="item well">
+                <p><i class="fa fa-fw fa-info-circle"></i>&nbsp;This demo was created to showcase the abilities of Eddie Prislac, polyglot code warrior and UI/UX designer. It makes use of Angular, Bootstrap, angular-whenScrolled, TypeKit, FontAwesome, and moment.js</p>
+                <p>The demo below loads lazy-loads json news items, five-at-a-time, as you scroll down. The items are from the feed at <a href="http://www.stellarbiotechnologies.com/media/press-releases/json" target="_blank">http://www.stellarbiotechnologies.com/media/press-releases/json</a>. </p>
+                </div>
+               </div>
                  <div ng-controller="scrollBoxController" when-scrolled="loadMore()" class="scroll-box">
                     <div ng-repeat="item in items" class="item well">
-                      <em class="published">{{item.published}}</em><br />
-                      <span class="title">{{item.title}}</span>
+                      <em class="published"><i class="fa fa-fw fa-calendar"></i>&nbsp;{{item.published}}</em><br />
+                      <span class="title tk-expo-sans-pro"><i class="fa fa-fw fa-quote-left published"></i>&nbsp;{{item.title}}&nbsp;<i class="fa fa-fw fa-quote-right published"></i></span>
                     </div>
-                  <div ng-show='loading'>Loading Data ...</div>
+                  <div ng-show='loading'><i class="fa fa-fw fa-spinner fa-pulse"></i>&nbsp;Loading Data ...</div>
               </div>
              </div>
          </div>
@@ -110,7 +125,8 @@ mod.directive("whenScrolled", function ($window) {
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 text-center">
                     <span class="footer-links">
-                        <a href="https://github.com/semperfried76/angular-inline-scroll-demo" target="_blank">Source Code Here</a>&nbsp;|&nbsp;Big thanks to juanxme for <a href="https://github.com/juanxme/angular-whenScrolled" target="_blank">angular-whenScrolled</a>
+                        <a href="https://github.com/semperfried76/angular-inline-scroll-demo" target="_blank" rel="source">Source Code Here</a>&nbsp;|&nbsp;Big thanks to juanxme for <a href="https://github.com/juanxme/angular-whenScrolled" target="_blank" rel="attribution">angular-whenScrolled</a><br />
+                        For more, visit my seldom-updated blog at: <a href="http://semperfried.com" target="_blank" rel="blog">semperfried.com</a>
                     </span>
                 </div>
             </div>
