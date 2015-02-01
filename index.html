@@ -7,6 +7,10 @@
            body {
                background-color: #566C7F;
            }
+           .header.hero {
+               background-color: #343D40;
+               color: #566C7F;
+           }
            h1 {
                font-family: "motor";
                font-size:3em;
@@ -24,7 +28,7 @@
                 background-color:#2B3640 !important;
                 border: 1px solid #2B3640;
             }
-           div.item.well p {
+           .header.hero p {
                color: #D1F3FF;
                text-align:justify;
                font-family: "expo-sans-pro",sans-serif;               
@@ -56,8 +60,8 @@
        <script type="text/javascript">
 
 
-var app = angular.module('App', ['angular-whenScrolled']);
-app.controller('scrollBoxController',function($scope,$http){
+var app = angular.module('app', ['angular-whenScrolled']);
+app.controller('ScrollBoxController',function($scope,$http){
     
     $scope.items = [];
     $scope.counter = 0;
@@ -101,20 +105,30 @@ mod.directive("whenScrolled", function ($window) {
 
        </script>
    </head> 
-   <body ng-app="App">
+   <body ng-app="app">
+   <div class="header hero">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-sm-12 col-md-6 col-md-offset-3">
+                  <div class="row">
+                      <div class="col-xs-2 col-sm-2 col-md-2 text-right"><br /><img src="AngularJS-Shield-small.png" alt="Angular Shield" style="width:48px;" /></div>
+                      <div class="col-xs-10 col-sm-10 col-md-10"><h1 class="tk-motor">Angular Infinite Scroll Demo</h1></div>
+                  </div>
+              </div>
+          </div>     
+          <div class="row">
+              <div class="col-sm-12 col-md-6 col-md-offset-3">
+                   <p><i class="fa fa-fw fa-info-circle"></i>&nbsp;This demo was created to showcase the abilities of Eddie Prislac, polyglot code warrior and UI/UX designer. It makes use of Angular, Bootstrap, angular-whenScrolled, TypeKit, FontAwesome, and moment.js. The demo below loads lazy-loads json news items, five-at-a-time, as you scroll down. The items are from the feed at <a href="http://www.stellarbiotechnologies.com/media/press-releases/json" target="_blank">http://www.stellarbiotechnologies.com/media/press-releases/json</a>. </p>
+              </div>
+          </div>
+      </div>
+       
+   </div>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-               <div style="padding:10px;">
-                 <div class="text-center"><img src="AngularJS-Shield-small.png" alt="Angular Shield" /></div>
-                  
-                   <h1 class="text-center tk-motor">Angular Infinite Scroll Demo</h1>
-                <div class="item well">
-                <p><i class="fa fa-fw fa-info-circle"></i>&nbsp;This demo was created to showcase the abilities of Eddie Prislac, polyglot code warrior and UI/UX designer. It makes use of Angular, Bootstrap, angular-whenScrolled, TypeKit, FontAwesome, and moment.js</p>
-                <p>The demo below loads lazy-loads json news items, five-at-a-time, as you scroll down. The items are from the feed at <a href="http://www.stellarbiotechnologies.com/media/press-releases/json" target="_blank">http://www.stellarbiotechnologies.com/media/press-releases/json</a>. </p>
-                </div>
-               </div>
-                 <div ng-controller="scrollBoxController" when-scrolled="loadMore()" class="scroll-box">
+               
+                 <div ng-controller="ScrollBoxController" when-scrolled="loadMore()" class="scroll-box">
                     <div ng-repeat="item in items" class="item well">
                       <em class="published"><i class="fa fa-fw fa-calendar"></i>&nbsp;{{item.published}}</em><br />
                       <span class="title tk-expo-sans-pro"><i class="fa fa-fw fa-quote-left published"></i>&nbsp;{{item.title}}&nbsp;<i class="fa fa-fw fa-quote-right published"></i></span>
@@ -136,8 +150,8 @@ mod.directive("whenScrolled", function ($window) {
             </div>
              
          </footer>
-    </div>
-     
+    
+       </div>
       
      
    </body>
