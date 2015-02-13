@@ -221,6 +221,7 @@
     }
   ];
 
+  // each type of element will need it's own method to be called by the factory, based on the 'type' property of items in 'formItems'
   function TextInput( options ) {
     this.name = options.name || '';
     this.id = options.id || '';
@@ -275,6 +276,7 @@
     return formGroup;
   }
 
+  // our actual factory method, it takes the formItem object passed to it and checks its type, generates the proper input/button, then inserts it into the proper form
   function formFactory( options ) {
     var returnedFormInput = {};
     var form = document.getElementById( options.formId );
@@ -293,16 +295,29 @@
                 
   }
 
+  // feeds formItems to the 'formFactory' method
   function buildForm( myFormItems ){
     for ( var i=0; i < myFormItems.length; i++ ) {
       formFactory( myFormItems[i] );
     }
   }
 
+  // give our generated buttons something to do
+  // we set the event listener on document because listening for the click event on items that have not yet been created in the dom on page load will not work if we set it directly on the click event of 'button'
+  $(document).on('click','button',function(){alert($(this).closest('form').attr('id') + ' form submitted!');});
+
+  // call 'buildForm'
   buildForm( formItems );
 
+
+
+
+///////////////////////////////////////////////////////////
   // unit tests
+//////////////////////////////////////////////////////////
+  // These tests will assert that the elements are being created within their proper container, and that an element with the proper tag-name and type has been generated using the 'formFactory' method
   QUnit.test('formFactory behavior', function( assert ) {
+      // data for our unit tests
       var testFormItems = [{
         name: "Email Address",
         id: "testEmail",
@@ -321,18 +336,39 @@
         type: "button",
         formId: "test-form-items"
       }];
+      
+      // grab the test form
       var testForm = document.getElementById('test-form-items');
+      
+      // nothing up muh sleeve... (no form elements in form)
+      assert.equal( testForm.children.length, 0, "0 form elements before 'buildForm' is run" );
+      
       buildForm( testFormItems );
-      assert.equal( testForm.children.length, 3, "3 Form Elements Created" );
+      
+      // presto! (form elements are generated)
+      // test that there is a form element for every item in 'testFormElements
+      assert.equal( testForm.children.length, testFormItems.length, "A form element has been created for each item in 'testFormElements' after 'buildForm is run" );
+      
+      // create variables for the generated elements
       var testEmail = document.getElementById('testEmail'),
           testPassword = document.getElementById('testPassword'),
           testSubmit = document.getElementById('testSubmitLogin') ;
-      assert.equal( testEmail.tagName.toLowerCase(), 'input', "Email field is an input" );
-      assert.equal( testPassword.tagName.toLowerCase(), 'input', "Password field is an input" );
-      assert.equal( testSubmit.tagName.toLowerCase(), 'button', "'Log In' is a button" );
-      assert.equal( testEmail.getAttribute('type'), 'text', "Email field has type='text'" );
-      assert.equal( testPassword.getAttribute('type'), 'password', "Password field has type='password'" );
+      // test that the form elements have the proper tag names
+      assert.equal( testEmail.tagName.toLowerCase(), 'input', "Generated Email field is an input" );
+      assert.equal( testPassword.tagName.toLowerCase(), 'input', "Generated Password field is an input" );
+      assert.equal( testSubmit.tagName.toLowerCase(), 'button', "Generated 'Log In' is a button" );
+      
+      // test that the form elements have the proper type
+      assert.equal( testEmail.getAttribute('type'), 'text', "Generated Email field has type='text'" );
+      assert.equal( testPassword.getAttribute('type'), 'password', "Generated Password field has type='password'" );
+      assert.equal( testSubmit.getAttribute('type'), 'button', "Generated 'Log in' button has type='button'" );
+      
+      // test that the form elements were generated within the proper form by seeing if they are not 'undefined' when trying to find them within 'testForm', using jQuery's 'find' method
+      assert.notEqual( $(testForm).find('#testEmail'),'undefined', "'#testEmail' was generated within '#testForm'");
+      assert.notEqual( $(testForm).find('#testPassword'),'undefined', "'#testPassword' was generated within '#testForm'");
+      assert.notEqual( $(testForm).find('#testSubmitLogin'),'undefined', "'#testSubmitLogin' was generated within '#testForm'");
   });
+   
 
 </script>
 </body>
