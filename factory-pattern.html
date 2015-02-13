@@ -279,7 +279,6 @@
   // our actual factory method, it takes the formItem object passed to it and checks its type, generates the proper input/button, then inserts it into the proper form
   function formFactory( options ) {
     var returnedFormInput = {};
-    var form = document.getElementById( options.formId );
     switch ( options.type ) {
         case 'text':
             returnedFormInput = new TextInput( options );
@@ -291,14 +290,16 @@
             returnedFormInput = new SubmitButton( options );
             break;
     }
-    form.appendChild( returnedFormInput );
+    return returnedFormInput;
                 
   }
 
   // feeds formItems to the 'formFactory' method
   function buildForm( myFormItems ){
     for ( var i=0; i < myFormItems.length; i++ ) {
-      formFactory( myFormItems[i] );
+      var form = document.getElementById( myFormItems[i].formId ),
+          generatedItem = formFactory( myFormItems[i] );
+      form.appendChild(generatedItem);
     }
   }
 
@@ -316,7 +317,7 @@
   // unit tests
 //////////////////////////////////////////////////////////
   // These tests will assert that the elements are being created within their proper container, and that an element with the proper tag-name and type has been generated using the 'formFactory' method
-  QUnit.test('formFactory behavior', function( assert ) {
+  QUnit.test('buildForm/formFactory behavior', function( assert ) {
       // data for our unit tests
       var testFormItems = [{
         name: "Email Address",
